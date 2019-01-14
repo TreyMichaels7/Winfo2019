@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+
+<head>
+    <script src="index.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.7.3/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyD95N6nh8kstdMateSyE-lS51JD-4HGgiY",
+            authDomain: "voluntinder-59250.firebaseapp.com",
+            databaseURL: "https://voluntinder-59250.firebaseio.com",
+            projectId: "voluntinder-59250",
+            storageBucket: "voluntinder-59250.appspot.com",
+            messagingSenderId: "969388000036"
+        };
+        firebase.initializeApp(config);
+    </script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+        crossorigin="anonymous">
+    <link type="text/css" href="profilepage.css" rel="stylesheet" />
+</head>
+
+<body>
+    <!-- Sign up -->
+    <div id="signUp" style = "display:none">
+        <input id="email" value="email"></input>
+        <input id="password" value="password"></input>
+        
+        <button type="submit" onclick="signup()">sign up</button>
+    </div>
+
+    <br />
+
+    <!-- Sign in -->
+    <div id="signIn">
+        <input id="emailSignIn" value="liorlevy@uw.edu"></input>
+        <input id="passwordSignIn" value="password"></input>
+        
+        <button type="submit" onclick="signin()">sign in</button>
+        <br>
+        <h5 onclick="showSignUp()">Don't have an account? Sign Up</h5>
+    </div>
+
+    <br />
+
+    <!-- Sign out -->
+    <button id = "signout" type="submit" onclick="signout()" style = "display:none">sign out</button>
+
+    <!-- Create profile page -->
+    <div id="createProfile" style = "display:none">
+        <h1>Create profile</h1>
+
+        <input value = "first name" id="firstName"></input>
+        <br>
+        <input value = "last name" id="lastName"></input>
+        <br>
+        <input value = "birthday" id="birthday"></input>
+        <br>
+        <input value = "say something about yourself!" id="bio" style = "width:30%"></input>
+        <br>
+        <button id="done" type="submit" onclick="createProfile()">Done</button>
+    </div>
+
+    <!-- landing page -->
+    <div id="landingPage" style = "display:none">
+        <h2>Welcome to Connect'n Care</h2>
+        <h5>Need help? Select "Need Assistance" to connect with a volunteer!</h5>
+        <h5>Want to help? Select "Offer Assistance" to connect with a person in need of assistance!</h5>
+        <button type="submit" onclick="createJob()">Need Assistance</button>
+        <button type="submit" onclick="showJob()">Offer Assistance</button>
+    </div>
+
+    <!-- need assistance -->
+    <div id="need" style = "display:none"> 
+        <main>
+            <form>
+                Address: <input type="text" id="address">
+                <input type="checkbox" name="default" checked> Use Default
+            </form>
+            <form>
+                <h2>Tasks to Complete</h2>
+                <input class="job" type="checkbox" name="groceries"> Grocery Delivery </br>
+                <input class="job" type="checkbox" name="pet"> Walking pet(s) </br>
+                <input class="job" type="checkbox" name="lawn"> Lawn Mowing </br>
+                <input class="job" type="checkbox" name="clean"> House Cleaning </br>
+                <input class="job" type="checkbox" name="other"> Other: <input id="other" type="text">
+            </form>
+            <div class="slidecontainer">
+                <h2>Estimated Time to Complete</h2>
+                <input type="range" name="rangeInput" min="0" max="100" value="1" class="slider" id="myRange" onchange="updateTextInput(this.value);">
+                <input type="text" id="textInput" value="">
+            </div>
+        </main>
+
+        <button type="submit" onclick="getNeedsInfo()">Done</button>
+    </div>
+
+    <!-- offer assistance -->
+
+    <div id="offerAssistance" style = "display:none">
+        <div id="navbar">
+            <!-- Navigation -->
+            <img src="" />
+            <div>
+                <p>Profile</p>
+                <p>History (V)</p>
+                <p>History</p>
+                <p>Post</p>
+                <p>Volunteer</p>
+                
+            </div>
+        </div>
+        <h1>Active Job</h1>
+        <div class="card">
+            <!-- Card0 -->
+            <table style="width: 50%">
+                <tr>
+                    <td>Name: <span classs="name"></span></td>
+                    <td>Rating: <span class="rating"></span></td>
+                </tr>
+                <tr>
+                    <td>Distance: <span class="distance"></span></td>
+                    <td>Time: <span class="time"></span></td>
+                </tr>
+                <tr>
+                    <td colspan="2">Tasks: <span class="tasks"></span></td>
+                </tr>
+            </table>
+        </div>
+        <h1>Available Jobs</h1>
+        <div class="cardList">
+            <div class="card">
+                <!-- Card1 -->
+                <table style="width: 50%">
+                    <tr>
+                        <td>Name: <span classs="name"></span></td>
+                        <td>Rating: <span class="rating"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Distance: <span class="distance"></span></td>
+                        <td>Time: <span class="time"></span></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Tasks: <span class="tasks"></span></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="card">
+                <!-- Card2 -->
+                <table style="width: 50%">
+                    <tr>
+                        <td>Name: <span classs="name"></span></td>
+                        <td>Rating: <span class="rating"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Distance: <span class="distance"></span></td>
+                        <td>Time: <span class="time"></span></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Tasks: <span class="tasks"></span></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="card">
+                <!-- Card3 -->
+                <table style="width: 50%">
+                    <tr>
+                        <td>Name: <span classs="name"></span></td>
+                        <td>Rating: <span class="rating"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Distance: <span class="distance"></span></td>
+                        <td>Time: <span class="time"></span></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Tasks: <span class="tasks"></span></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="card">
+                <!-- Card4 -->
+                <table style="width: 50%">
+                    <tr>
+                        <td>Name: <span classs="name"></span></td>
+                        <td>Rating: <span class="rating"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Distance: <span class="distance"></span></td>
+                        <td>Time: <span class="time"></span></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Tasks: <span class="tasks"></span></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="card">
+                <!-- Card5 -->
+                <table style="width: 50%">
+                    <tr>
+                        <td>Name: <span classs="name"></span></td>
+                        <td>Rating: <span class="rating"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Distance: <span class="distance"></span></td>
+                        <td>Time: <span class="time"></span></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Tasks: <span class="tasks"></span></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</body>
